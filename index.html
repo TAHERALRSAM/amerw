@@ -9,43 +9,23 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #050811; color: white; scroll-behavior: smooth; }
-        
-        /* الهيرو المصلح للموبايل */
-        .hero-section {
-            background-image: linear-gradient(to bottom, rgba(5, 8, 17, 0.4), rgba(5, 8, 17, 0.9)), url('hero.jpg');
-            background-size: cover; background-position: center; background-repeat: no-repeat;
-            background-attachment: fixed; height: 75vh; display: flex; align-items: center; justify-content: center; text-align: center;
-        }
-        @media (max-width: 768px) { .hero-section { background-attachment: scroll; height: 60vh; } }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.4s; cursor: pointer;
-        }
-        .glass-card:hover { border-color: #ef4444; transform: translateY(-5px); }
-
+        .hero-section { background-image: linear-gradient(to bottom, rgba(5, 8, 17, 0.4), rgba(5, 8, 17, 0.9)), url('hero.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 75vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+        @media (max-width: 768px) { .hero-section { height: 60vh; } }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.4s; cursor: pointer; }
         .text-red-custom { color: #ef4444; }
         .bg-red-custom { background-color: #ef4444; }
-
-        /* النوافذ المنبثقة */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 1000; align-items: center; justify-content: center; padding: 15px; overflow-y: auto; }
-        .modal-content { background: #0c0c0c; border: 1px solid #333; max-width: 900px; width: 100%; border-radius: 24px; position: relative; animation: zoomIn 0.3s ease; }
-        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        /* شريط الأسهم السفلي */
+        .modal-content { background: #0c0c0c; border: 1px solid #333; max-width: 900px; width: 100%; border-radius: 24px; position: relative; }
         .nav-bar { display: flex; align-items: center; justify-content: center; gap: 30px; padding: 15px; background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); }
-        .nav-btn { background: #ef4444; color: white; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
-
-        .glass-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; width: 100%; outline: none; color: white; margin-bottom: 15px; }
-        .loading-overlay { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; flex-direction: column; align-items: center; justify-content: center; border-radius: 24px; }
-        
+        .nav-btn { background: #ef4444; color: white; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .glass-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; width: 100%; outline: none; color: white; margin-bottom: 15px; text-align: right; }
+        .loading-overlay { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; flex-direction: column; align-items: center; justify-content: center; border-radius: 24px; }
         .work-item { display: none; }
-        .work-item.show { display: block; animation: fadeIn 0.5s ease; }
+        .work-item.show { display: block; }
     </style>
 </head>
 <body>
 
-    <!-- القائمة العلوية -->
     <nav class="fixed w-full z-50 bg-black/80 backdrop-blur-lg p-3 border-b border-white/5">
         <div class="max-w-7xl mx-auto flex justify-between items-center px-4">
             <div class="text-xl font-black text-red-custom tracking-tighter">أمير عايد</div>
@@ -53,20 +33,14 @@
         </div>
     </nav>
 
-    <!-- الهيرو -->
     <header class="hero-section">
         <div data-aos="zoom-in" class="px-4">
-            <h1 class="text-6xl md:text-8xl font-black mb-2 tracking-tighter text-white">أمير <span class="text-red-custom">عايد</span></h1>
+            <h1 class="text-6xl md:text-8xl font-black mb-2 text-white">أمير <span class="text-red-custom">عايد</span></h1>
             <p class="text-sm md:text-xl font-bold text-gray-200 mb-6 italic">فنٌ يملأ الفراغ.. ودقة تحاكي الواقع ✨</p>
-            
-            <!-- زر طلب الرسم تحت النص مباشرة -->
-            <button onclick="openOrderModal()" class="bg-red-custom text-white px-8 py-3 rounded-2xl font-black text-lg shadow-2xl shadow-red-500/40 hover:scale-105 transition-all">
-                اطلب رسمك الخاص الآن ✨
-            </button>
+            <button onclick="openOrderModal()" class="bg-red-custom text-white px-8 py-3 rounded-2xl font-black text-lg shadow-2xl shadow-red-500/40 hover:scale-105 transition-all">اطلب رسمك الخاص الآن ✨</button>
         </div>
     </header>
 
-    <!-- المعرض -->
     <section class="max-w-6xl mx-auto px-4 py-12 text-right">
         <div class="flex flex-wrap justify-center gap-2 mb-10">
             <button onclick="filterArt('all')" id="all-btn" class="bg-red-custom px-6 py-2 rounded-lg font-bold text-sm">الكل</button>
@@ -74,108 +48,80 @@
             <button onclick="filterArt('cafe')" id="cafe-btn" class="bg-white/5 px-6 py-2 rounded-lg font-bold text-sm">جداريات</button>
             <button onclick="filterArt('pencil')" id="pencil-btn" class="bg-white/5 px-6 py-2 rounded-lg font-bold text-sm">رصاص</button>
         </div>
-
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <!-- جداريات -->
-            <div class="work-item show cafe glass-card rounded-2xl" onclick="openMultiGallery('mural')">
-                <img src="ta1.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl">
-                <div class="p-3 text-center font-bold text-xs text-red-custom">جداريات (10 صور)</div>
-            </div>
-
-            <!-- رصاص -->
-            <div class="work-item show pencil glass-card rounded-2xl" onclick="openMultiGallery('pencil')">
-                <img src="ar1.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl">
-                <div class="p-3 text-center font-bold text-xs text-red-custom">رسم رصاص (6 صور)</div>
-            </div>
-
-            <!-- لوحات مفردة -->
-            <div class="work-item show oil glass-card rounded-2xl" onclick="openSingleItem('لوحة البومة', 'owl.jpg', '50x70 سم', '100$', 'رسم زيتي يدوي.')">
-                <img src="owl.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl"><div class="p-3 text-center text-xs">لوحة البومة</div>
-            </div>
-            <div class="work-item show portrait oil glass-card rounded-2xl" onclick="openSingleItem('بورتريه القيصر', 'kazem.jpg', '40x60 سم', '80$', 'دمج الفن والخط العربي.')">
-                <img src="kazem.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl"><div class="p-3 text-center text-xs text-gray-400">بورتريه القيصر</div>
-            </div>
+            <div class="work-item show cafe glass-card rounded-2xl" onclick="openMultiGallery('mural')"><img src="ta1.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl"><div class="p-3 text-center font-bold text-xs text-red-custom">جداريات</div></div>
+            <div class="work-item show pencil glass-card rounded-2xl" onclick="openMultiGallery('pencil')"><img src="ar1.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl"><div class="p-3 text-center font-bold text-xs text-red-custom">رسم رصاص</div></div>
+            <div class="work-item show oil glass-card rounded-2xl" onclick="openSingleItem('لوحة البومة', 'owl.jpg', '50x70 سم', '100$', 'رسم زيتي.')"><img src="owl.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl"></div>
+            <div class="work-item show portrait glass-card rounded-2xl" onclick="openSingleItem('القيصر', 'kazem.jpg', '40x60 سم', '80$', 'بورتريه.')"><img src="kazem.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl"></div>
         </div>
     </section>
 
-    <!-- نافذة طلب الرسم (الرقم المحدث) -->
+    <!-- استمارة طلب الرسم المصلحة -->
     <div id="orderModal" class="modal">
-        <div class="modal-content max-w-lg p-8">
+        <div class="modal-content max-w-lg p-8 shadow-2xl border-red-custom/50">
             <div id="orderLoading" class="loading-overlay">
-                <div class="w-10 h-10 border-4 border-red-custom border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p class="text-xs font-bold italic text-white">جاري إرسال طلبك الفني...</p>
+                <div class="w-12 h-12 border-4 border-red-custom border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p id="loadingText" class="text-sm font-bold">جاري الرفع والإرسال...</p>
             </div>
-            <button onclick="closeOrderModal()" class="absolute top-4 right-4 text-2xl">✕</button>
+            <button onclick="closeOrderModal()" class="absolute top-4 right-4 text-2xl text-gray-400">✕</button>
             <h2 class="text-2xl font-black text-red-custom mb-6 text-center">استمارة طلب رسم شخصي</h2>
-            <form onsubmit="handleOrderRequest(event)">
-                <label class="block text-xs text-gray-500 mb-2">نوع الرسم المطلوب</label>
+            <form id="drawingForm" onsubmit="handleOrderRequest(event)">
+                <label class="block text-xs text-gray-500 mb-1 mr-2">نوع الرسم</label>
                 <select id="orderType" class="glass-input"><option>رصاص</option><option>زيتي</option><option>أكريليك</option></select>
-                <label class="block text-xs text-gray-500 mb-2">مقاس اللوحة</label>
+                <label class="block text-xs text-gray-500 mb-1 mr-2">مقاس اللوحة</label>
                 <select id="orderSize" class="glass-input"><option>A4</option><option>A3</option><option>A2</option><option>مقاس مخصص</option></select>
-                <input type="tel" id="orderPhone" placeholder="رقم هاتف التواصل" class="glass-input" required>
-                <div class="relative border-2 border-dashed border-white/10 rounded-xl p-6 text-center mb-6 hover:border-red-custom transition">
-                    <input type="file" id="orderFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" required onchange="document.getElementById('orderFileName').innerText = this.files[0].name">
-                    <p id="orderFileName" class="text-gray-500 text-sm">📷 ارفع الصورة المراد رسمها</p>
+                <input type="tel" id="orderPhone" placeholder="رقم هاتفك للتواصل" class="glass-input text-right" required>
+                <div class="relative border-2 border-dashed border-white/10 rounded-xl p-6 text-center mb-6 hover:border-red-custom transition cursor-pointer">
+                    <input type="file" id="orderFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="document.getElementById('orderFileName').innerText = this.files[0].name">
+                    <p id="orderFileName" class="text-gray-500 text-sm italic">📷 ارفع الصورة (اختياري)</p>
                 </div>
-                <button type="submit" class="w-full bg-red-custom p-4 rounded-xl font-black text-white shadow-xl hover:bg-red-700 transition">تأكيد الطلب والإرسال</button>
+                <button type="submit" class="w-full bg-red-custom p-4 rounded-xl font-black text-white hover:bg-red-700 transition shadow-lg shadow-red-600/20">إرسال الطلب الآن</button>
             </form>
         </div>
     </div>
 
-    <!-- نافذة عرض الصور والتفاصيل -->
+    <!-- نافذة الصور المعتادة -->
     <div id="imageModal" class="modal">
         <div class="modal-content shadow-2xl" onclick="event.stopPropagation()">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl z-30 text-white/40">✕</button>
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl text-white/30 hover:text-red-custom transition">✕</button>
             <div class="flex flex-col md:flex-row">
                 <div class="relative w-full md:w-3/5 bg-black h-80 md:h-[600px] flex items-center justify-center">
-                    <img id="modal-img" src="" class="max-w-full max-h-full object-contain transition-all">
+                    <img id="modal-img" src="" class="max-w-full max-h-full object-contain">
                     <div id="nav-controls" class="absolute bottom-0 left-0 w-full nav-bar hidden">
                         <div class="nav-btn" onclick="changeImage(1)">←</div>
-                        <span id="img-counter" class="text-white font-bold text-xs tracking-widest">1 / 10</span>
+                        <span id="img-counter" class="text-white font-bold text-xs">1 / 10</span>
                         <div class="nav-btn" onclick="changeImage(-1)">→</div>
                     </div>
                 </div>
-                <div class="w-full md:w-2/5 p-8 overflow-y-auto max-h-[400px] md:max-h-[600px] text-right">
+                <div class="w-full md:w-2/5 p-8 text-right">
                     <h2 id="modal-title" class="text-3xl font-black text-red-custom mb-6"></h2>
-                    
-                    <!-- كليشة الجداريات -->
-                    <div id="mural-text" class="text-gray-300 text-sm leading-relaxed space-y-4 hidden">
+                    <div id="mural-text" class="text-gray-300 text-sm space-y-4 hidden leading-relaxed">
                         <p class="font-bold text-white">نحول جدرانكم الصامتة إلى لوحات فنية تنبض بالحياة.</p>
-                        <p>نتميز بالاعتماد على أحدث طرق التخطيط لضمان أعلى درجات الدقة في النسب والمنظور الهندسي.</p>
-                        <p><span class="text-red-custom font-bold">• خاماتنا:</span> خامات محترفة (أكريليك وغيرها) مختارة بعناية.</p>
+                        <p>نعتمد على أحدث طرق التخطيط لضمان أعلى درجات الدقة في النسب والمنظور الهندسي.</p>
                         <p><span class="text-red-custom font-bold">• أسعارنا:</span> تبدأ من 150 وتختلف حسب الحجم.</p>
                     </div>
-
-                    <!-- كليشة الرصاص الجديدة -->
-                    <div id="pencil-text" class="text-gray-300 text-sm leading-relaxed space-y-4 hidden">
+                    <div id="pencil-text" class="text-gray-300 text-sm space-y-4 hidden leading-relaxed italic">
                         <p class="font-bold text-white">الرصاص.. لغة الظل والنور التي تخلد الملامح.</p>
-                        <p>نحول صوركم الشخصية إلى بورتريهات واقعية نابضة بالحياة، حيث تندمج دقة التفاصيل بجمال التظليل اليدوي لتشكل ذكرى لا تُنسى.</p>
-                        <div class="bg-red-custom/10 p-3 rounded-lg border-r-4 border-red-custom">
-                            <p class="italic">دقة عالية في رسم ملامح الوجه، الشعر، وتفاصيل الملابس بلمسة فنية كلاسيكية.</p>
-                        </div>
+                        <p>نحول صوركم إلى بورتريهات واقعية نابضة بالحياة تخلد أجمل ذكرياتكم.</p>
                     </div>
-
                     <div id="info-box" class="mt-4">
-                        <p id="modal-desc" class="text-gray-400 mb-4 text-sm italic"></p>
-                        <div class="bg-white/5 p-4 rounded-xl">
-                            <p class="text-xs mb-1">📏 الحجم:</p><p id="modal-size" class="text-white font-bold mb-3"></p>
-                            <p class="text-xs mb-1">💰 السعر:</p><p id="modal-price" class="text-2xl font-black text-red-custom"></p>
-                        </div>
+                        <p id="modal-desc" class="text-gray-400 mb-4 text-sm"></p>
+                        <div class="bg-white/5 p-4 rounded-xl border-r-4 border-red-custom"><p id="modal-size" class="text-white font-bold mb-2"></p><p id="modal-price" class="text-2xl font-black text-red-custom"></p></div>
                     </div>
-                    <a id="order-wa-link" href="#" class="block w-full mt-8 bg-red-custom text-white text-center p-4 rounded-xl font-bold">تواصل واتساب</a>
+                    <a id="wa-link-btn" href="#" class="block w-full mt-8 bg-red-custom text-white text-center p-4 rounded-xl font-bold">تواصل واتساب</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- نافذة الورشة -->
-    <div id="workshopModal" class="modal"><div class="modal-content p-8 max-w-sm text-center"><button onclick="closeWorkshop()" class="absolute top-4 right-4 text-2xl">✕</button><h2 class="text-xl font-black text-red-custom mb-2 tracking-tight italic">ورشة العمل</h2><p class="text-yellow-500 text-xs font-bold italic">⚠️ التسجيل متوقف حالياً (مؤقت)</p></div></div>
+    <div id="workshopModal" class="modal"><div class="modal-content p-8 max-w-sm text-center"><button onclick="closeWorkshop()" class="absolute top-4 right-4 text-2xl">✕</button><h2 class="text-xl font-black text-red-custom mb-2">ورشة العمل</h2><p class="text-yellow-500 text-xs font-bold italic">⚠️ التسجيل متوقف مؤقتاً</p></div></div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
         const IMGBB_KEY = "6be30b0b97950f28876b5d0335022c60";
-        const MY_WA = "9647829558820"; // الرقم المحدث
+        const MY_PHONE = "9647829558820"; // الرقم بصيغة صحيحة 100%
 
         let muralImages = ['ta1.jpg', 'ta2.jpg', 'ta3.jpg', 'ta4.jpg', 'ta5.jpg', 'ta6.jpg', 'ta7.jpg', 'ta8.jpg', 'ta9.jpg', 'ta10.jpg'];
         let pencilImages = ['ar1.jpg', 'ar2.jpg', 'ar3.jpg', 'ar4.jpg', 'ar5.jpg', 'ar6.jpg'];
@@ -198,7 +144,7 @@
             currentGallery = isMural ? muralImages : pencilImages;
             document.getElementById('mural-text').style.display = isMural ? 'block' : 'none';
             document.getElementById('pencil-text').style.display = isMural ? 'none' : 'block';
-            document.getElementById('modal-title').innerText = isMural ? "جداريات إبداعية" : "لوحات الرصاص";
+            document.getElementById('modal-title').innerText = isMural ? "أعمال الجداريات" : "لوحات الرصاص";
             currentIndex = 0;
             document.getElementById('nav-controls').className = "absolute bottom-0 left-0 w-full nav-bar flex";
             document.getElementById('info-box').style.display = 'none';
@@ -209,7 +155,7 @@
         function updateGallery() {
             document.getElementById('modal-img').src = currentGallery[currentIndex];
             document.getElementById('img-counter').innerText = (currentIndex+1) + " / " + currentGallery.length;
-            document.getElementById('order-wa-link').href = `https://wa.me/${MY_WA}?text=${encodeURIComponent('مرحباً أمير، شاهدت أعمالك في الموقع وأود الاستفسار.')}`;
+            document.getElementById('wa-link-btn').href = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent('مرحباً أمير، شاهدت أعمالك وأود الاستفسار.')}`;
         }
 
         function changeImage(n) {
@@ -227,24 +173,48 @@
             document.getElementById('modal-img').src = img;
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-desc').innerText = desc;
-            document.getElementById('modal-size').innerText = size;
-            document.getElementById('modal-price').innerText = price;
-            document.getElementById('order-wa-link').href = `https://wa.me/${MY_WA}?text=${encodeURIComponent('أود طلب لوحة: ' + title)}`;
+            document.getElementById('modal-size').innerText = "📏 " + size;
+            document.getElementById('modal-price').innerText = "💰 " + price;
+            document.getElementById('wa-link-btn').href = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent('أود طلب لوحة: ' + title)}`;
             document.getElementById('imageModal').style.display='flex';
         }
 
+        // --- الجزء المصلح للإرسال ---
         async function handleOrderRequest(e) {
             e.preventDefault();
-            const loader = document.getElementById('orderLoading'); loader.style.display = 'flex';
-            const file = document.getElementById('orderFile').files[0];
+            const loader = document.getElementById('orderLoading');
+            const type = document.getElementById('orderType').value;
+            const size = document.getElementById('orderSize').value;
+            const phone = document.getElementById('orderPhone').value;
+            const fileInput = document.getElementById('orderFile');
+            
+            loader.style.display = 'flex';
+            let imageUrl = "(لم يتم إرفاق صورة)";
+
             try {
-                const fd = new FormData(); fd.append("image", file);
-                const r = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method:"POST", body:fd});
-                const d = await r.json(); const url = d.data.url;
-                const msg = `🎨 طلب رسم جديد من الموقع:\n- النوع: ${document.getElementById('orderType').value}\n- المقاس: ${document.getElementById('orderSize').value}\n- الهاتف: ${document.getElementById('orderPhone').value}\n- الرابط: ${url}`;
+                if (fileInput.files.length > 0) {
+                    const fd = new FormData();
+                    fd.append("image", fileInput.files[0]);
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+                    const data = await res.json();
+                    if (data.success) {
+                        imageUrl = data.data.url;
+                    }
+                }
+
+                const msg = `🎨 طلب رسم جديد:\n- النوع: ${type}\n- المقاس: ${size}\n- الهاتف: ${phone}\n- رابط الصورة: ${imageUrl}`;
+                
+                // الانتقال للواتساب
+                window.location.href = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`;
                 loader.style.display = 'none';
-                window.location.href = `https://wa.me/${MY_WA}?text=${encodeURIComponent(msg)}`;
-            } catch(e) { loader.style.display = 'none'; alert("خطأ في الإرسال"); }
+
+            } catch (err) {
+                // إذا فشل الرفع لأي سبب، أرسل البيانات بدون صورة لكي لا يضيع الطلب
+                console.log("Error uploading image, sending text only.");
+                const msgFallback = `🎨 طلب رسم (بدون صورة):\n- النوع: ${type}\n- المقاس: ${size}\n- الهاتف: ${phone}`;
+                window.location.href = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msgFallback)}`;
+                loader.style.display = 'none';
+            }
         }
     </script>
 </body>

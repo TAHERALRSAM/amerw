@@ -3,36 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مرسم أمير عايد | معرض الفن والورشات</title>
+    <title>مرسم أمير عايد | المعرض الفني</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #050811; color: white; scroll-behavior: smooth; }
         
-        /* تنسيق الهيرو - حل مشكلة الموبايل */
+        /* الهيرو المصلح للموبايل */
         .hero-section {
             background-image: linear-gradient(to bottom, rgba(5, 8, 17, 0.3), rgba(5, 8, 17, 0.9)), url('hero.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* يعمل في الكمبيوتر */
-            height: 65vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            background-attachment: fixed; height: 65vh; display: flex; align-items: center; justify-content: center; text-align: center;
         }
-
-        /* تعديلات خاصة للموبايل فقط */
-        @media (max-width: 768px) {
-            .hero-section {
-                background-attachment: scroll; /* إلغاء الثبات في الموبايل لتظهر الصورة كاملة */
-                height: 50vh; /* تقليل الارتفاع ليناسب شاشة الهاتف */
-                background-position: center center;
-            }
-            .hero-section h1 { font-size: 3.5rem; } /* تصغير الخط قليلاً للموبايل */
-        }
+        @media (max-width: 768px) { .hero-section { background-attachment: scroll; height: 50vh; } }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
@@ -43,9 +27,29 @@
         .text-red-custom { color: #ef4444; }
         .bg-red-custom { background-color: #ef4444; }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
-        .modal-content { background: #111; border: 1px solid #ef4444; max-width: 900px; width: 100%; border-radius: 20px; overflow-y: auto; max-height: 90vh; position: relative; }
+        /* نافذة العرض */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; align-items: center; justify-content: center; padding: 10px; }
+        .modal-content { background: #0c0c0c; border: 1px solid #333; max-width: 900px; width: 100%; border-radius: 24px; overflow: hidden; position: relative; animation: zoomIn 0.3s ease; }
         
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* أنيميشن الصور عند التنقل */
+        .img-fade { animation: imgFade 0.5s ease; }
+        @keyframes imgFade { from { opacity: 0.4; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        /* شريط التحكم (الأسهم السفلية) */
+        .nav-bar {
+            display: flex; align-items: center; justify-content: center; gap: 30px;
+            padding: 15px; background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-btn {
+            background: #ef4444; color: white; width: 45px; height: 45px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        .nav-btn:hover { background: #ff1f1f; transform: scale(1.1); }
+        .nav-btn:active { transform: scale(0.9); }
+
         .category-btn { background: rgba(255, 255, 255, 0.05); padding: 8px 18px; border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 0.85rem; }
         .category-btn.active { background: #ef4444; }
         
@@ -56,26 +60,26 @@
 </head>
 <body>
 
-    <!-- القائمة العلوية -->
+    <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-black/80 backdrop-blur-lg p-3 border-b border-white/5">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="max-w-7xl mx-auto flex justify-between items-center px-4">
             <div class="text-xl font-black text-red-custom">أمير عايد</div>
             <div class="flex gap-2">
-                <button onclick="openWorkshop()" class="border border-red-custom text-red-custom px-3 py-1.5 rounded-full font-bold text-[10px] md:text-xs">احجز ورشة</button>
-                <a href="https://wa.me/YOUR_NUMBER" class="bg-red-custom px-3 py-1.5 rounded-full font-bold text-[10px] md:text-xs">تواصل</a>
+                <button onclick="openWorkshop()" class="border border-red-custom text-red-custom px-4 py-1.5 rounded-xl font-bold text-[10px] md:text-xs">احجز ورشة</button>
+                <a href="https://wa.me/YOUR_NUMBER" class="bg-red-custom px-4 py-1.5 rounded-xl font-bold text-[10px] md:text-xs text-white">تواصل</a>
             </div>
         </div>
     </nav>
 
-    <!-- الهيرو المصلح للموبايل -->
+    <!-- Hero -->
     <header class="hero-section">
         <div data-aos="zoom-in" class="px-4">
-            <h1 class="text-6xl md:text-8xl font-black mb-2 drop-shadow-lg">أمير <span class="text-red-custom">عايد</span></h1>
-            <p class="text-base md:text-xl font-bold text-gray-200 bg-black/20 px-4 py-1 rounded-full">فنٌ يملأ الفراغ.. ودقة تحاكي الواقع ✨</p>
+            <h1 class="text-6xl md:text-8xl font-black mb-2 tracking-tighter">أمير <span class="text-red-custom">عايد</span></h1>
+            <p class="text-sm md:text-xl font-bold text-gray-200">فنٌ يملأ الفراغ.. ودقة تحاكي الواقع ✨</p>
         </div>
     </header>
 
-    <!-- المعرض -->
+    <!-- Gallery Section -->
     <section class="max-w-6xl mx-auto px-4 py-12">
         <div class="flex flex-wrap justify-center gap-2 mb-10">
             <button onclick="filterArt('all')" id="all-btn" class="category-btn active">الكل</button>
@@ -87,66 +91,80 @@
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-grid">
             <!-- جداريات -->
             <div class="work-item show cafe glass-card rounded-2xl" onclick="openMuralGallery()">
-                <img src="ta1.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl">
-                <div class="p-3 text-center">
-                    <h3 class="font-bold text-xs">أعمال الجداريات</h3>
-                    <p class="text-red-custom text-[10px] mt-1">(10 صور +)</p>
+                <div class="relative">
+                    <img src="ta1.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl">
+                    <div class="absolute top-2 right-2 bg-red-custom text-[8px] px-2 py-0.5 rounded-md">10 صور</div>
                 </div>
+                <div class="p-3 text-center font-bold text-xs">أعمال الجداريات</div>
             </div>
-
-            <!-- لوحة البومة -->
-            <div class="work-item show oil glass-card rounded-2xl" onclick="openSingleItem('لوحة البومة', 'owl.jpg', '50x70 سم', '100$', 'رسم زيتي يدوي.')">
-                <img src="owl.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl">
-                <div class="p-3 text-center"><h3 class="font-bold text-xs text-gray-300">لوحة البومة</h3></div>
+            <!-- اللوحات الأخرى (بومة، كاظم، تراثية) -->
+            <div class="work-item show oil glass-card rounded-2xl" onclick="openSingleItem('لوحة البومة', 'owl.jpg', '50x70 سم', '100$', 'رسم زيتي يدوي دقيق.')">
+                <img src="owl.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl"><div class="p-3 text-center text-xs">لوحة البومة</div>
             </div>
-
-            <!-- كاظم -->
-            <div class="work-item show portrait glass-card rounded-2xl" onclick="openSingleItem('بورتريه القيصر', 'kazem.jpg', '40x60 سم', '80$', 'دمج الفن مع الخط العربي.')">
-                <img src="kazem.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl">
-                <div class="p-3 text-center"><h3 class="font-bold text-xs text-gray-300">بورتريه القيصر</h3></div>
+            <div class="work-item show portrait glass-card rounded-2xl" onclick="openSingleItem('بورتريه القيصر', 'kazem.jpg', '40x60 سم', '80$', 'دمج الفن والخط العربي.')">
+                <img src="kazem.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl"><div class="p-3 text-center text-xs">بورتريه القيصر</div>
             </div>
-
-            <!-- تاريخية -->
             <div class="work-item show oil glass-card rounded-2xl" onclick="openSingleItem('لوحة تراثية', 'history.jpg', '60x80 سم', '150$', 'رسم زيتي واقعي.')">
-                <img src="history.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl">
-                <div class="p-3 text-center"><h3 class="font-bold text-xs text-gray-300">لوحة تراثية</h3></div>
+                <img src="history.jpg" class="w-full h-40 md:h-48 object-cover rounded-t-2xl"><div class="p-3 text-center text-xs">لوحة تراثية</div>
             </div>
         </div>
     </section>
 
-    <!-- النوافذ المنبثقة (نفس الكود السابق مع تحسين الموبايل) -->
+    <!-- Workshop Modal -->
     <div id="workshopModal" class="modal">
-        <div class="modal-content p-6 max-w-sm text-center">
-            <button onclick="closeWorkshop()" class="absolute top-3 right-4 text-xl">✕</button>
+        <div class="modal-content p-8 max-w-sm text-center">
+            <button onclick="closeWorkshop()" class="absolute top-4 right-4 text-2xl">✕</button>
             <h2 class="text-xl font-black text-red-custom mb-2">حجز ورشة عمل</h2>
-            <p class="text-yellow-500 text-xs mb-4 font-bold">⚠️ التسجيل متوقف حالياً (مؤقت)</p>
-            <input type="text" placeholder="الاسم" disabled class="bg-gray-900 border border-gray-800 p-2 w-full rounded mb-3">
-            <button class="w-full bg-gray-800 text-gray-500 p-2 rounded font-bold">إرسال</button>
+            <p class="text-yellow-500 text-xs mb-6 font-bold">⚠️ التسجيل متوقف حالياً (مؤقت)</p>
+            <input type="text" placeholder="الاسم" disabled class="bg-gray-900 border border-gray-800 p-3 w-full rounded-xl mb-4 text-sm">
+            <button class="w-full bg-gray-800 text-gray-500 p-3 rounded-xl font-bold">إرسال الطلب</button>
         </div>
     </div>
 
+    <!-- MAIN IMAGE MODAL (The Gallery) -->
     <div id="imageModal" class="modal">
         <div class="modal-content shadow-2xl" onclick="event.stopPropagation()">
-            <div id="nav-controls" style="display: none;">
-                <div class="absolute top-1/2 right-2 bg-red-custom/80 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer z-10" onclick="changeImage(-1)">→</div>
-                <div class="absolute top-1/2 left-2 bg-red-custom/80 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer z-10" onclick="changeImage(1)">←</div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2">
-                <img id="modal-img" src="" class="w-full h-64 md:h-[600px] object-contain bg-black">
-                <div class="p-6">
-                    <button onclick="closeModal()" class="absolute top-4 right-4 text-2xl">✕</button>
-                    <h2 id="modal-title" class="text-2xl font-black text-red-custom mb-4"></h2>
-                    <div id="mural-text" class="text-gray-300 text-xs leading-relaxed space-y-3 hidden">
-                        <p class="font-bold text-white">نحول جدرانكم الصامتة إلى لوحات فنية تنبض بالحياة.</p>
-                        <p>نتميز بالاعتماد على أحدث طرق التخطيط لضمان أعلى درجات الدقة في النسب والمنظور.</p>
-                        <p><span class="text-red-custom">• خاماتنا:</span> أكريليك وغيرها مختارة بعناية.</p>
-                        <p><span class="text-red-custom">• أسعارنا:</span> تبدأ من 150 وتختلف حسب التفاصيل.</p>
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl z-30 text-white/50 hover:text-red-custom transition">✕</button>
+            
+            <div class="flex flex-col md:flex-row">
+                <!-- قسم الصورة -->
+                <div class="relative w-full md:w-3/5 bg-black h-80 md:h-[600px] flex items-center justify-center">
+                    <img id="modal-img" src="" class="max-w-full max-h-full object-contain transition-all">
+                    
+                    <!-- شريط التحكم (الأسهم السفلية) - يظهر للجداريات فقط -->
+                    <div id="nav-controls" class="absolute bottom-0 left-0 w-full nav-bar hidden">
+                        <div class="nav-btn" onclick="changeImage(1)">←</div>
+                        <span id="img-counter" class="text-white font-bold text-sm tracking-widest">1 / 10</span>
+                        <div class="nav-btn" onclick="changeImage(-1)">→</div>
                     </div>
+                </div>
+
+                <!-- قسم المعلومات -->
+                <div class="w-full md:w-2/5 p-6 md:p-10 overflow-y-auto max-h-[400px] md:max-h-[600px]">
+                    <h2 id="modal-title" class="text-2xl md:text-3xl font-black text-red-custom mb-6"></h2>
+                    
+                    <!-- نص الجداريات -->
+                    <div id="mural-text" class="text-gray-300 text-xs md:text-sm leading-relaxed space-y-4 hidden">
+                        <p class="font-bold text-white text-base">نحول جدرانكم الصامتة إلى لوحات فنية تنبض بالحياة.</p>
+                        <p>نتميز بالاعتماد على أحدث طرق التخطيط لضمان أعلى درجات الدقة في النسب والمنظور الهندسي.</p>
+                        <div class="bg-white/5 p-3 rounded-lg border-r-2 border-red-custom">
+                            <p><span class="text-red-custom font-bold">• خاماتنا:</span> أكريليك وغيرها مختارة بعناية.</p>
+                        </div>
+                        <div class="bg-white/5 p-3 rounded-lg border-r-2 border-red-custom">
+                            <p><span class="text-red-custom font-bold">• أسعارنا:</span> تبدأ من 150 وتختلف حسب التفاصيل.</p>
+                        </div>
+                    </div>
+
+                    <!-- تفاصيل اللوحات المفردة -->
                     <div id="info-box">
-                        <p class="text-sm">📏 الحجم: <span id="modal-size" class="text-white"></span></p>
-                        <p class="text-xl font-black text-red-custom mt-2">💰 السعر: <span id="modal-price"></span></p>
+                        <p id="modal-desc" class="text-gray-400 mb-6 text-sm"></p>
+                        <div class="bg-white/5 p-4 rounded-xl space-y-2">
+                            <p class="text-xs">📏 الحجم: <span id="modal-size" class="text-white font-bold italic"></span></p>
+                            <p class="text-2xl font-black text-red-custom">💰 السعر: <span id="modal-price"></span></p>
+                        </div>
                     </div>
-                    <a href="https://wa.me/YOUR_NUMBER" class="block w-full mt-6 bg-red-custom text-white text-center p-3 rounded-lg font-bold">اطلب الآن</a>
+
+                    <a href="https://wa.me/YOUR_NUMBER" class="block w-full mt-8 bg-red-custom text-white text-center p-4 rounded-xl font-black hover:bg-red-700 transition shadow-lg shadow-red-500/20">اطلب الآن عبر واتساب</a>
                 </div>
             </div>
         </div>
@@ -155,6 +173,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
+
         let muralImages = ['ta1.jpg', 'ta2.jpg', 'ta3.jpg', 'ta4.jpg', 'ta5.jpg', 'ta6.jpg', 'ta7.jpg', 'ta8.jpg', 'ta9.jpg', 'ta10.jpg'];
         let currentIndex = 0;
 
@@ -170,9 +189,11 @@
         function openWorkshop() { document.getElementById('workshopModal').style.display = 'flex'; }
         function closeWorkshop() { document.getElementById('workshopModal').style.display = 'none'; }
 
+        // فتح معرض الجداريات
         function openMuralGallery() {
             currentIndex = 0;
-            document.getElementById('nav-controls').style.display = 'block';
+            document.getElementById('nav-controls').classList.remove('hidden');
+            document.getElementById('nav-controls').classList.add('flex');
             document.getElementById('mural-text').classList.remove('hidden');
             document.getElementById('info-box').style.display = 'none';
             updateMural();
@@ -180,8 +201,14 @@
         }
 
         function updateMural() {
-            document.getElementById('modal-img').src = muralImages[currentIndex];
+            const imgElement = document.getElementById('modal-img');
+            imgElement.classList.remove('img-fade'); // ريست للأنيميشن
+            void imgElement.offsetWidth; // تريك لتشغيل الأنيميشن مرة أخرى
+            imgElement.src = muralImages[currentIndex];
+            imgElement.classList.add('img-fade');
+            
             document.getElementById('modal-title').innerText = "فنٌ يملأ الفراغ..";
+            document.getElementById('img-counter').innerText = (currentIndex + 1) + " / 10";
         }
 
         function changeImage(n) {
@@ -191,12 +218,14 @@
             updateMural();
         }
 
+        // فتح اللوحات المفردة
         function openSingleItem(title, img, size, price, desc) {
-            document.getElementById('nav-controls').style.display = 'none';
+            document.getElementById('nav-controls').classList.add('hidden');
             document.getElementById('mural-text').classList.add('hidden');
             document.getElementById('info-box').style.display = 'block';
             document.getElementById('modal-img').src = img;
             document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
             document.getElementById('modal-size').innerText = size;
             document.getElementById('modal-price').innerText = price;
             document.getElementById('imageModal').style.display = 'flex';

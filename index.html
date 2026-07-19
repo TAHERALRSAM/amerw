@@ -3,85 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مرسم أمير | المعرض الشخصي</title>
+    <title>مرسم أمير عايد | معرض الفن والورشات</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #050811; color: white; scroll-behavior: smooth; }
+        
         .hero-section {
-            /* هنا الكود يقرأ صورة الواجهة */
-            background-image: linear-gradient(to bottom, rgba(5, 8, 17, 0.7), rgba(5, 8, 17, 1)), url('hero.jpg');
+            background-image: linear-gradient(to bottom, rgba(5, 8, 17, 0.3), rgba(5, 8, 17, 0.8)), url('hero.jpg');
             background-size: cover; background-position: center; background-attachment: fixed;
-            height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center;
+            height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center;
         }
+
         .glass-card {
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.4s; overflow: hidden;
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.4s; cursor: pointer;
         }
-        .glass-card:hover { border-color: #8b5cf6; transform: translateY(-10px); }
-        .category-btn { background: rgba(255, 255, 255, 0.05); padding: 10px 20px; border-radius: 12px; cursor: pointer; transition: 0.3s; }
-        .category-btn.active { background: #8b5cf6; box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); }
+        .glass-card:hover { border-color: #ef4444; transform: translateY(-5px); }
+
+        .text-red-custom { color: #ef4444; }
+        .bg-red-custom { background-color: #ef4444; }
+
+        /* نافذة العرض والنموذج */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: #111; border: 1px solid #ef4444; max-width: 900px; width: 100%; border-radius: 20px; overflow-y: auto; max-height: 90vh; position: relative; }
+        
+        .category-btn { background: rgba(255, 255, 255, 0.05); padding: 8px 18px; border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
+        .category-btn.active { background: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+        
         .work-item { display: none; }
-        .work-item.show { display: block; animation: fadeInUp 0.5s ease forwards; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .work-item.show { display: block; animation: fadeIn 0.5s ease; }
+
+        input, select, textarea { width: 100%; background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 10px; color: white; margin-bottom: 15px; outline: none; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <nav class="fixed w-full z-50 bg-black/50 backdrop-blur-md p-4 border-b border-white/5">
+    <!-- القائمة العلوية -->
+    <nav class="fixed w-full z-50 bg-black/70 backdrop-blur-lg p-4 border-b border-white/5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="text-2xl font-black text-purple-500">مرسم أمير</div>
-            <button class="bg-purple-600 px-5 py-2 rounded-full font-bold text-sm">تواصل معي</button>
+            <div class="text-2xl font-black text-red-custom tracking-tighter">أمير عايد</div>
+            <div class="flex gap-3">
+                <button onclick="openWorkshop()" class="border border-red-custom text-red-custom px-4 py-2 rounded-full font-bold text-xs hover:bg-red-custom hover:text-white transition">احجز مقعد في ورشة</button>
+                <a href="https://wa.me/YOUR_NUMBER" class="bg-red-custom px-4 py-2 rounded-full font-bold text-xs">تواصل معي</a>
+            </div>
         </div>
     </nav>
 
+    <!-- الهيرو -->
     <header class="hero-section">
         <div data-aos="zoom-in">
-            <h1 class="text-6xl font-black mb-4">مرسم <span class="text-purple-500">أمير</span></h1>
-            <p class="text-xl text-gray-300 italic">فن يحاكي الواقع بريشة الإبداع</p>
+            <h1 class="text-5xl md:text-7xl font-black mb-4">أمير <span class="text-red-custom">عايد</span></h1>
+            <p class="text-lg md:text-xl font-bold text-gray-300 italic">فنٌ يملأ الفراغ.. ودقة تحاكي الواقع ✨</p>
         </div>
     </header>
 
-    <section class="max-w-7xl mx-auto px-6 py-20">
-        <div class="flex flex-wrap justify-center gap-4 mb-16">
+    <!-- الفلتر والمعرض -->
+    <section class="max-w-6xl mx-auto px-6 py-16">
+        <div class="flex flex-wrap justify-center gap-3 mb-12">
             <button onclick="filterArt('all')" id="all-btn" class="category-btn active">الكل</button>
-            <button onclick="filterArt('oil')" id="oil-btn" class="category-btn">الرسم الزيتي</button>
-            <button onclick="filterArt('cafe')" id="cafe-btn" class="category-btn">جداريات كوفيات</button>
-            <button onclick="filterArt('portrait')" id="portrait-btn" class="category-btn">رسم البورتريه</button>
+            <button onclick="filterArt('oil')" id="oil-btn" class="category-btn">زيتي</button>
+            <button onclick="filterArt('cafe')" id="cafe-btn" class="category-btn">جداريات</button>
+            <button onclick="filterArt('portrait')" id="portrait-btn" class="category-btn">بورتريه</button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div class="work-item show oil" data-aos="fade-up">
-                <div class="glass-card rounded-[2rem]">
-                    <img src="owl.jpg" class="w-full h-[500px] object-cover">
-                    <div class="p-8"><h3 class="text-2xl font-bold mb-2">لوحة البومة</h3></div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="gallery-grid">
+            
+            <div class="work-item show cafe glass-card rounded-2xl" onclick="openMuralGallery()">
+                <img src="ta1.jpg" class="w-full h-48 object-cover rounded-t-2xl">
+                <div class="p-4 text-center">
+                    <h3 class="font-bold text-sm">أعمال الجداريات</h3>
+                    <p class="text-red-custom text-xs mt-1">(10 صور +)</p>
                 </div>
             </div>
-            <div class="work-item show cafe" data-aos="fade-up">
-                <div class="glass-card rounded-[2rem]">
-                    <img src="face.jpg" class="w-full h-[500px] object-cover">
-                    <div class="p-8"><h3 class="text-2xl font-bold mb-2">بورتريه عصري</h3></div>
-                </div>
+
+            <div class="work-item show oil glass-card rounded-2xl" onclick="openSingleItem('لوحة البومة', 'owl.jpg', '50x70 سم', '100$', 'رسم زيتي يدوي بتفاصيل دقيقة.')">
+                <img src="owl.jpg" class="w-full h-48 object-cover rounded-t-2xl">
+                <div class="p-4 text-center"><h3 class="font-bold text-sm text-gray-300">لوحة البومة</h3></div>
             </div>
-            <div class="work-item show oil portrait" data-aos="fade-up">
-                <div class="glass-card rounded-[2rem]">
-                    <img src="history.jpg" class="w-full h-[500px] object-cover">
-                    <div class="p-8"><h3 class="text-2xl font-bold mb-2">لوحة تراثية</h3></div>
-                </div>
+
+            <div class="work-item show portrait glass-card rounded-2xl" onclick="openSingleItem('بورتريه القيصر', 'kazem.jpg', '40x60 سم', '80$', 'دمج الفن مع الخط العربي.')">
+                <img src="kazem.jpg" class="w-full h-48 object-cover rounded-t-2xl">
+                <div class="p-4 text-center"><h3 class="font-bold text-sm text-gray-300">بورتريه القيصر</h3></div>
             </div>
-            <div class="work-item show portrait" data-aos="fade-up">
-                <div class="glass-card rounded-[2rem]">
-                    <img src="kazem.jpg" class="w-full h-[500px] object-cover">
-                    <div class="p-8"><h3 class="text-2xl font-bold mb-2">لوحة القيصر</h3></div>
+
+            <div class="work-item show oil glass-card rounded-2xl" onclick="openSingleItem('لوحة تراثية', 'history.jpg', '60x80 سم', '150$', 'رسم كلاسيكي واقعي.')">
+                <img src="history.jpg" class="w-full h-48 object-cover rounded-t-2xl">
+                <div class="p-4 text-center"><h3 class="font-bold text-sm text-gray-300">لوحة تراثية</h3></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- نافذة الحجز (مؤقت) -->
+    <div id="workshopModal" class="modal">
+        <div class="modal-content p-8 max-w-md">
+            <button onclick="closeWorkshop()" class="absolute top-4 right-4 text-2xl">✕</button>
+            <h2 class="text-2xl font-black text-red-custom mb-2">حجز ورشة عمل</h2>
+            <p class="text-yellow-500 text-sm mb-6 font-bold">⚠️ التسجيل متوقف حالياً (مؤقت)</p>
+            <form onsubmit="return false">
+                <input type="text" placeholder="الاسم" disabled>
+                <input type="text" placeholder="الهاتف" disabled>
+                <button class="w-full bg-gray-800 text-gray-500 p-3 rounded-xl font-bold cursor-not-allowed">إرسال الطلب</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة عرض الصور والتفاصيل الجديدة -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content shadow-2xl" onclick="event.stopPropagation()">
+            <div id="nav-controls" style="display: none;">
+                <div class="absolute top-1/2 right-4 bg-red-custom w-10 h-10 rounded-full flex items-center justify-center cursor-pointer z-10" onclick="changeImage(-1)">→</div>
+                <div class="absolute top-1/2 left-4 bg-red-custom w-10 h-10 rounded-full flex items-center justify-center cursor-pointer z-10" onclick="changeImage(1)">←</div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <img id="modal-img" src="" class="w-full h-64 md:h-[600px] object-contain bg-black">
+                <div class="p-8 overflow-y-auto">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl hover:text-red-custom">✕</button>
+                    <h2 id="modal-title" class="text-3xl font-black text-red-custom mb-6"></h2>
+                    
+                    <!-- النص الجديد للجداريات -->
+                    <div id="mural-text" class="text-gray-300 text-sm leading-relaxed space-y-4">
+                        <p class="font-bold text-white text-base">نحول جدرانكم الصامتة إلى لوحات فنية تنبض بالحياة.</p>
+                        <p>نتميز بالاعتماد على أحدث طرق التخطيط لضمان أعلى درجات الدقة في النسب، القياسات، والمنظور الهندسي لتظهر الرسمة كجزء من المكان.</p>
+                        <div class="bg-white/5 p-4 rounded-xl border-r-4 border-red-custom">
+                            <p><span class="text-red-custom font-bold">• خاماتنا:</span> نستخدم خامات متنوعة ومحترفة (أكريليك وغيرها) يتم اختيارها بعناية فائقة حسب نوع الجدار ورغبتكم الخاصة.</p>
+                        </div>
+                        <div class="bg-white/5 p-4 rounded-xl border-r-4 border-red-custom">
+                            <p><span class="text-red-custom font-bold">• أسعارنا:</span> الإبداع لا يعود مكلفاً.. أسعارنا تبدأ من <span class="text-white font-bold">150</span> وتختلف بحسب الحجم والتفاصيل.</p>
+                        </div>
+                    </div>
+
+                    <p id="modal-desc" class="text-gray-400 mb-6"></p>
+                    <div id="info-box">
+                        <p class="mb-2">📏 الحجم: <span id="modal-size" class="font-bold text-white"></span></p>
+                        <p class="text-2xl font-black text-red-custom">💰 السعر: <span id="modal-price"></span></p>
+                    </div>
+                    <a href="https://wa.me/YOUR_NUMBER" class="block w-full mt-8 bg-red-custom text-white text-center p-4 rounded-xl font-bold hover:bg-red-700 transition">اطلب الآن عبر واتساب</a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
+
+        let muralImages = ['ta1.jpg', 'ta2.jpg', 'ta3.jpg', 'ta4.jpg', 'ta5.jpg', 'ta6.jpg', 'ta7.jpg', 'ta8.jpg', 'ta9.jpg', 'ta10.jpg'];
+        let currentIndex = 0;
+
         function filterArt(category) {
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(category + '-btn').classList.add('active');
@@ -90,6 +163,46 @@
                 else item.classList.remove('show');
             });
         }
+
+        function openWorkshop() { document.getElementById('workshopModal').style.display = 'flex'; }
+        function closeWorkshop() { document.getElementById('workshopModal').style.display = 'none'; }
+
+        function openMuralGallery() {
+            currentIndex = 0;
+            document.getElementById('nav-controls').style.display = 'block';
+            document.getElementById('mural-text').style.display = 'block';
+            document.getElementById('info-box').style.display = 'none';
+            document.getElementById('modal-desc').style.display = 'none';
+            updateMural();
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function updateMural() {
+            document.getElementById('modal-img').src = muralImages[currentIndex];
+            document.getElementById('modal-title').innerText = "فنٌ يملأ الفراغ..";
+        }
+
+        function changeImage(n) {
+            currentIndex += n;
+            if (currentIndex >= muralImages.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = muralImages.length - 1;
+            updateMural();
+        }
+
+        function openSingleItem(title, img, size, price, desc) {
+            document.getElementById('nav-controls').style.display = 'none';
+            document.getElementById('mural-text').style.display = 'none';
+            document.getElementById('info-box').style.display = 'block';
+            document.getElementById('modal-desc').style.display = 'block';
+            document.getElementById('modal-img').src = img;
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-size').innerText = size;
+            document.getElementById('modal-price').innerText = price;
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('imageModal').style.display = 'none'; }
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مرسم أمير عايد | التحكم الكامل</title>
+    <title>مرسم أمير عايد | المعرض والمجموعات</title>
     
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -20,12 +20,10 @@
         .bg-red-custom { background-color: #ef4444; }
         
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; align-items: center; justify-content: center; padding: 10px; overflow-y: auto; }
-        .modal-content { background: #0c0c0c; border: 1px solid #333; width: 100%; max-width: 950px; max-height: 95vh; border-radius: 28px; position: relative; overflow-y: auto; animation: zoomIn 0.3s ease; }
+        .modal-content { background: #0c0c0c; border: 1px solid #333; width: 100%; max-width: 1000px; max-height: 95vh; border-radius: 28px; position: relative; overflow-y: auto; overflow-x: hidden; animation: zoomIn 0.3s ease; }
         .close-btn { position: absolute; top: 15px; left: 15px; background: #ef4444; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 2100; cursor: pointer; border: 2px solid white; }
         
-        /* إخفاء لوحة الإدارة افتراضياً */
-        #adminControlPanel, .delete-btn { display: none; }
-
+        #adminPanel, .delete-btn { display: none; }
         .glass-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; width: 100%; outline: none; color: white; margin-bottom: 10px; text-align: right; }
         .name-glow { text-shadow: 0 0 40px rgba(239, 68, 68, 0.6); font-size: clamp(3.5rem, 12vw, 8.5rem); }
         .nav-bar { display: flex; align-items: center; justify-content: center; gap: 30px; padding: 15px; background: rgba(255,255,255,0.03); }
@@ -39,20 +37,20 @@
         <div class="text-2xl font-black text-red-custom">أمير عايد</div>
         <div class="flex gap-4 items-center">
             <button onclick="logout()" id="logoutBtn" style="display:none" class="text-[10px] text-red-500 font-black border border-red-500/30 px-3 py-1 rounded-lg">خروج</button>
-            <button onclick="openOrderModal()" class="bg-red-custom text-white px-4 py-1.5 rounded-xl font-bold text-[10px] shadow-lg">طلب رسم خاص ✨</button>
+            <button onclick="openOrderModal()" class="bg-red-custom text-white px-4 py-1.5 rounded-xl font-bold text-[10px] shadow-lg">طلب رسم ✨</button>
         </div>
     </nav>
 
     <!-- Hero -->
     <header class="hero-section">
-        <div class="px-4">
+        <div data-aos="fade-up">
             <h1 class="font-black text-white name-glow leading-tight">أمير <span class="text-red-custom">عايد</span></h1>
             <p class="text-lg md:text-2xl font-bold mb-10 italic bg-black/40 px-8 py-2 rounded-full inline-block mt-4">فنٌ يملأ الفراغ.. ودقة تحاكي الواقع ✨</p>
             
-            <!-- لوحة التحكم (ستظهر لك فقط بعد تسجيل الدخول) -->
-            <div id="adminControlPanel" class="mb-10 bg-green-600/10 border border-green-600 p-6 rounded-[2.5rem] shadow-2xl">
-                <p class="text-green-500 text-sm mb-4 font-bold">مرحباً طاهر، يمكنك الآن إدارة المعرض:</p>
-                <button onclick="document.getElementById('uploadModal').style.display='flex'" class="bg-green-600 text-white px-10 py-3 rounded-2xl font-black shadow-lg hover:bg-green-700 transition">➕ نشر لوحة أو مجموعة صور</button>
+            <!-- لوحة المدير -->
+            <div id="adminPanel" class="mb-10 bg-green-600/10 border border-green-600 p-6 rounded-[2.5rem]">
+                <p class="text-green-500 text-sm mb-4 font-bold">مرحباً طاهر، لوحة التحكم جاهزة:</p>
+                <button onclick="document.getElementById('uploadModal').style.display='flex'" class="bg-green-600 text-white px-10 py-3 rounded-2xl font-black shadow-xl hover:bg-green-700 transition">➕ رفع صور جديدة</button>
             </div>
 
             <div id="flash-sale-container"></div>
@@ -62,14 +60,15 @@
     <!-- المعرض -->
     <section class="max-w-7xl mx-auto px-6 py-20 text-right">
         <div id="filterButtons" class="flex flex-wrap justify-center gap-3 mb-16">
-            <button onclick="filterArt('all')" class="cat-btn bg-red-custom px-8 py-2.5 rounded-2xl font-black text-sm text-white">الكل</button>
+            <button onclick="filterArt('all')" class="cat-btn bg-red-custom px-8 py-2.5 rounded-2xl font-black text-sm text-white shadow-xl">الكل</button>
         </div>
+
         <div id="dynamicGallery" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 text-center">
-            <!-- الصور هنا -->
+            <!-- جاري التحميل -->
         </div>
     </section>
 
-    <!-- المدخل السري (P طاهر) -->
+    <!-- المدخل السري -->
     <footer class="py-20 border-t border-white/5 text-center">
         <div id="loginEntry" class="flex items-center justify-center gap-2 text-gray-800 hover:text-red-900 transition cursor-pointer" onclick="document.getElementById('loginModal').style.display='flex'">
             <span class="w-8 h-8 border border-current rounded-full flex items-center justify-center font-bold">P</span>
@@ -77,30 +76,35 @@
         </div>
     </footer>
 
+    <!-- Modal الرفع المتعدد والمجموعات -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content max-w-lg p-10 border-green-600 border-2">
+            <div class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">✕</div>
+            <h2 class="text-2xl font-black text-green-500 mb-8 text-center underline">نشر أعمال فنية</h2>
+            <div id="batchStatus" class="hidden bg-blue-600 text-white p-3 text-[10px] text-center mb-6 rounded-xl font-bold"></div>
+            
+            <input type="text" id="artTitle" placeholder="عنوان اللوحة" class="glass-input">
+            <input type="text" id="artCategory" placeholder="القسم (مثلاً: زيتي)" class="glass-input">
+            <input type="text" id="artGroupName" placeholder="اسم المجموعة (لربط الصور ببعضها)" class="glass-input">
+            <input type="text" id="artPrice" placeholder="السعر" class="glass-input">
+            <input type="text" id="artSize" placeholder="القياس" class="glass-input">
+            <textarea id="artDesc" placeholder="تفاصيل العمل" class="glass-input h-24"></textarea>
+            
+            <label class="block text-gray-500 text-xs mb-2 mr-2">يمكنك اختيار أكثر من صورة:</label>
+            <input type="file" id="artFiles" multiple class="block w-full text-xs text-gray-400 mb-6">
+            
+            <button onclick="uploadBatch()" id="upBtn" class="w-full bg-green-600 p-4 rounded-xl font-black text-lg">بدء الرفع</button>
+        </div>
+    </div>
+
     <!-- Modal تسجيل الدخول -->
     <div id="loginModal" class="modal">
         <div class="modal-content max-w-sm p-10 text-center border-red-custom/50 border-2">
             <div class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">✕</div>
-            <h2 class="text-2xl font-black text-red-custom mb-8">تسجيل دخول الإدارة</h2>
-            <input type="email" id="email" placeholder="البريد الإلكتروني" class="glass-input">
+            <h2 class="text-2xl font-black text-red-custom mb-8 italic">تحقق الإدارة</h2>
+            <input type="email" id="email" placeholder="البريد" class="glass-input">
             <input type="password" id="password" placeholder="كلمة السر" class="glass-input">
             <button onclick="login()" class="w-full bg-red-custom p-4 rounded-xl font-black mt-4 text-white">دخول</button>
-        </div>
-    </div>
-
-    <!-- Modal الرفع -->
-    <div id="uploadModal" class="modal">
-        <div class="modal-content max-w-lg p-10 border-green-600 border-2">
-            <div class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">✕</div>
-            <h2 class="text-2xl font-black text-green-500 mb-8 text-center underline">رفع أعمال جديدة</h2>
-            <div id="batchStatus" class="hidden bg-blue-600 text-white p-3 text-[10px] text-center mb-6 rounded-xl font-bold"></div>
-            <input type="text" id="artTitle" placeholder="اسم اللوحة" class="glass-input">
-            <input type="text" id="artCategory" placeholder="القسم (زيتي، روضات، جداريات...)" class="glass-input">
-            <input type="text" id="artPrice" placeholder="السعر" class="glass-input">
-            <input type="text" id="artSize" placeholder="القياس" class="glass-input">
-            <textarea id="artDesc" placeholder="التفاصيل" class="glass-input h-24"></textarea>
-            <input type="file" id="artFiles" multiple class="block w-full text-xs text-gray-400 mb-6">
-            <button onclick="uploadBatchArtworks()" id="upBtn" class="w-full bg-green-600 p-4 rounded-xl font-black text-lg">بدء الرفع</button>
         </div>
     </div>
 
@@ -113,20 +117,25 @@
                     <img id="modal-img" src="" class="max-w-full max-h-full object-contain">
                     <div id="nav-controls" class="absolute bottom-0 left-0 w-full nav-bar hidden">
                         <div class="nav-btn" onclick="changeImage(1)">←</div>
-                        <span id="img-counter" class="text-white font-bold text-xs"></span>
+                        <span id="img-counter" class="text-white font-bold text-xs tracking-widest"></span>
                         <div class="nav-btn" onclick="changeImage(-1)">→</div>
                     </div>
                 </div>
-                <div class="w-full md:w-2/5 p-10 text-right overflow-y-auto">
+                <div class="w-full md:w-2/5 p-10 text-right overflow-y-auto max-h-[450px] md:max-h-[650px]">
                     <h2 id="modal-title" class="text-3xl font-black text-red-custom mb-6"></h2>
-                    <div id="info-box" class="bg-white/5 p-6 rounded-3xl border-r-4 border-red-custom"><p id="modal-size" class="text-white font-bold mb-2"></p><p id="modal-price" class="text-3xl font-black text-red-custom"></p></div>
-                    <a id="wa-link" href="#" class="block w-full mt-10 bg-red-custom text-white text-center p-5 rounded-2xl font-black text-lg shadow-lg">تواصل واتساب</a>
+                    <p id="modal-desc" class="text-gray-300 text-sm mb-6 leading-relaxed border-r-2 border-red-custom pr-4 font-bold"></p>
+                    <div class="bg-white/5 p-6 rounded-3xl space-y-4">
+                        <p id="modal-size" class="text-white font-bold text-lg"></p>
+                        <p id="modal-price" class="text-3xl font-black text-red-custom"></p>
+                    </div>
+                    <a id="wa-link" href="#" class="block w-full mt-10 bg-red-custom text-white text-center p-5 rounded-2xl font-black text-lg">تواصل واتساب</a>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // --- Firebase Config ---
         const firebaseConfig = {
             apiKey: "AIzaSyD0g9fQAHVKLfdwUTFzsRvgd_ejXKgDMZM",
             authDomain: "artt2001-47518.firebaseapp.com",
@@ -139,23 +148,20 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        const MY_PHONE = "9647829558820";
         const ADMIN_EMAIL = "taheralrsam100@gmail.com";
         const IMGBB_KEY = "2992948833d81d6dc8555d60cdd13431";
+        const MY_PHONE = "9647829558820";
 
-        // وظيفة إظهار أدوات الإدارة يدوياً
-        function enableAdminMode() {
-            document.getElementById('adminControlPanel').style.display = 'block';
-            document.getElementById('logoutBtn').style.display = 'block';
-            document.getElementById('loginEntry').style.display = 'none';
-            // إظهار أزرار الحذف في المعرض
-            const deleteBtns = document.querySelectorAll('.delete-btn');
-            deleteBtns.forEach(btn => btn.style.display = 'inline-block');
-        }
+        let artworks = [];
+        let currentViewerGroup = [];
+        let currentIndex = 0;
 
+        // إدارة الدخول
         auth.onAuthStateChanged(user => {
             if (user && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-                enableAdminMode();
+                document.getElementById('adminPanel').style.display = 'block';
+                document.getElementById('logoutBtn').style.display = 'block';
+                document.getElementById('loginEntry').style.display = 'none';
             }
         });
 
@@ -164,26 +170,26 @@
             const p = document.getElementById('password').value;
             try {
                 await auth.signInWithEmailAndPassword(e, p);
-                document.getElementById('loginModal').style.display = 'none';
-                enableAdminMode();
-                alert("تم تفعيل لوحة التحكم!");
-            } catch(err) { alert("بيانات الدخول خطأ!"); }
+                location.reload();
+            } catch(err) { alert("بيانات خاطئة!"); }
         }
-
         function logout() { auth.signOut(); location.reload(); }
 
-        async function uploadBatchArtworks() {
+        // الرفع المتعدد والمجموعات
+        async function uploadBatch() {
             const files = document.getElementById('artFiles').files;
             const title = document.getElementById('artTitle').value;
             const cat = document.getElementById('artCategory').value;
-            if (files.length === 0 || !title || !cat) return alert("املاً البيانات الأساسية");
+            const group = document.getElementById('artGroupName').value || title;
+
+            if (files.length === 0 || !title || !cat) return alert("أكمل البيانات الأساسية");
 
             const upBtn = document.getElementById('upBtn');
-            const statusDiv = document.getElementById('batchStatus');
-            upBtn.disabled = true; statusDiv.classList.remove('hidden');
+            const status = document.getElementById('batchStatus');
+            upBtn.disabled = true; status.classList.remove('hidden');
 
             for (let i = 0; i < files.length; i++) {
-                statusDiv.innerText = `جاري رفع (${i + 1} من ${files.length})...`;
+                status.innerText = `جاري رفع صورة (${i + 1} من أصل ${files.length})...`;
                 try {
                     const fd = new FormData(); fd.append("image", files[i]);
                     const r = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
@@ -191,23 +197,24 @@
                     if (d.success) {
                         await db.collection('artworks').add({
                             title: files.length > 1 ? `${title} (${i+1})` : title,
-                            category: cat, group: title,
+                            category: cat, group: group,
                             price: document.getElementById('artPrice').value,
                             size: document.getElementById('artSize').value,
                             desc: document.getElementById('artDesc').value,
                             url: d.data.url, createdAt: firebase.firestore.FieldValue.serverTimestamp()
                         });
                     }
-                } catch (e) {}
+                } catch (e) { console.log(e); }
             }
-            location.reload();
+            alert("تم الرفع بنجاح!"); location.reload();
         }
 
-        let artworks = [];
+        // تحميل المعرض
         async function loadData() {
             const snap = await db.collection('artworks').orderBy('createdAt', 'desc').get();
             artworks = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
             
+            // الفلاتر
             const filterDiv = document.getElementById('filterButtons');
             const cats = [...new Set(artworks.map(a => a.category))];
             cats.forEach(c => {
@@ -221,10 +228,10 @@
             grid.innerHTML = "";
             const filtered = cat === 'all' ? artworks : artworks.filter(a => a.category === cat);
             const isAdmin = auth.currentUser && auth.currentUser.email === ADMIN_EMAIL;
-            
+
             filtered.forEach(art => {
                 grid.innerHTML += `
-                    <div class="glass-card rounded-[2.2rem] overflow-hidden group">
+                    <div class="glass-card rounded-[2.2rem] overflow-hidden">
                         <img src="${art.url}" onclick="openWork('${art.id}')" class="w-full h-48 md:h-56 object-cover cursor-pointer">
                         <div class="p-3 text-center">
                             <p class="text-[10px] font-bold text-gray-400">${art.title}</p>
@@ -234,10 +241,44 @@
             });
         }
 
+        function openWork(id) {
+            const art = artworks.find(a => a.id === id);
+            // إذا كانت اللوحة تنتمي لمجموعة (Group)، ابحث عن باقي المجموعة
+            if (art.group && art.group.trim() !== "") {
+                currentViewerGroup = artworks.filter(a => a.group === art.group);
+            } else {
+                currentViewerGroup = [art];
+            }
+            
+            currentIndex = currentViewerGroup.findIndex(a => a.id === id);
+            updateModal();
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function updateModal() {
+            const art = currentViewerGroup[currentIndex];
+            document.getElementById('modal-img').src = art.url;
+            document.getElementById('modal-title').innerText = art.title;
+            document.getElementById('modal-desc').innerText = art.desc || "عمل فني احترافي بريشة أمير عايد.";
+            document.getElementById('modal-size').innerText = art.size ? "📏 القياس: " + art.size : "";
+            document.getElementById('modal-price').innerText = art.price ? "💰 السعر: " + art.price : "";
+            document.getElementById('wa-link').href = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent('أود طلب: ' + art.title)}`;
+            
+            const nav = document.getElementById('nav-controls');
+            if(currentViewerGroup.length > 1) {
+                nav.className = "absolute bottom-0 left-0 w-full nav-bar flex";
+                document.getElementById('img-counter').innerText = `${currentIndex + 1} / ${currentViewerGroup.length}`;
+            } else { nav.className = "hidden"; }
+        }
+
+        function changeImage(n) {
+            currentIndex = (currentIndex + n + currentViewerGroup.length) % currentViewerGroup.length;
+            updateModal();
+        }
+
         async function deleteArt(id) { if(confirm("حذف؟")) { await db.collection('artworks').doc(id).delete(); location.reload(); } }
         function closeModal() { document.getElementById('imageModal').style.display='none'; }
         function filterArt(c) { renderGallery(c); }
-        function openWork(id) { /* منطق فتح الصور بالأسهم */ }
 
         loadData();
     </script>

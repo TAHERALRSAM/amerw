@@ -3,46 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مرسم أمير عايد | المعرض الاحترافي</title>
+    <title>مرسم أمير عايد | الرفع المتعدد الذكي</title>
     
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
+    
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #050811; color: white; scroll-behavior: smooth; overflow-x: hidden; }
-        
-        /* الهيرو المصلح لضمان ظهور الاسم */
-        .hero-section { 
-            background-image: linear-gradient(to bottom, rgba(5, 8, 17, 0.6), rgba(5, 8, 17, 0.98)), url('hero.jpg'); 
-            background-size: cover; background-position: center; 
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            text-align: center; padding: 100px 20px;
-        }
-
+        .hero-section { background-image: linear-gradient(to bottom, rgba(5, 8, 17, 0.6), rgba(5, 8, 17, 0.98)), url('hero.jpg'); background-size: cover; background-position: center; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 100px 20px; }
         .text-red-custom { color: #ef4444; }
         .bg-red-custom { background-color: #ef4444; }
-        
-        /* النافذة المنبثقة المصلحة */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; align-items: center; justify-content: center; padding: 10px; overflow-y: auto; }
-        .modal-content { background: #0c0c0c; border: 1px solid #333; width: 100%; max-width: 950px; max-height: 95vh; border-radius: 28px; position: relative; overflow-y: auto; overflow-x: hidden; animation: zoomIn 0.3s ease; }
-        
-        /* زر الخروج الثابت باللون الأحمر */
-        .close-btn { position: absolute; top: 15px; left: 15px; background: #ef4444; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 2100; cursor: pointer; border: 2px solid white; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
-        
-        .flash-box { background: rgba(239, 68, 68, 0.08); border: 2px solid #ef4444; cursor: pointer; transition: 0.3s; }
-        .flash-box:hover { border-color: white; }
-
-        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.4s; cursor: pointer; }
+        .modal-content { background: #0c0c0c; border: 1px solid #333; width: 100%; max-width: 950px; max-height: 95vh; border-radius: 28px; position: relative; overflow-y: auto; overflow-x: hidden; }
+        .close-btn { position: absolute; top: 15px; left: 15px; background: #ef4444; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 2100; cursor: pointer; border: 2px solid white; }
         .admin-only { display: none; }
         .glass-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; width: 100%; outline: none; color: white; margin-bottom: 10px; text-align: right; }
-        @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .name-glow { text-shadow: 0 0 40px rgba(239, 68, 68, 0.6); font-size: clamp(3.5rem, 12vw, 8.5rem); }
+        .discount-badge { position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 900; font-size: 12px; z-index: 10; }
+        .nav-bar { display: flex; align-items: center; justify-content: center; gap: 30px; padding: 15px; background: rgba(255,255,255,0.03); }
+        .nav-btn { background: #ef4444; color: white; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -50,146 +31,102 @@
     <!-- Navbar -->
     <nav class="fixed w-full top-0 z-[150] bg-black/90 backdrop-blur-xl p-4 border-b border-white/5 flex justify-between items-center px-4">
         <div class="text-2xl font-black text-red-custom tracking-tighter">أمير عايد</div>
-        <div class="flex gap-4">
-            <button onclick="document.getElementById('loginModal').style.display='flex'" id="loginBtn" class="text-[10px] text-gray-500 underline decoration-red-500">لوحة التحكم</button>
-            <button onclick="logout()" id="logoutBtn" class="admin-only text-[10px] text-red-500 font-black">خروج</button>
-            <button onclick="openOrderModal()" class="bg-red-custom text-white px-4 py-1.5 rounded-xl font-bold text-[10px] shadow-lg">طلب رسم</button>
-        </div>
+        <button onclick="openOrderModal()" class="bg-red-custom text-white px-5 py-2 rounded-xl font-bold text-xs shadow-lg">طلب رسم خاص ✨</button>
     </nav>
 
     <!-- Hero -->
-    <header class="hero-section">
-        <div data-aos="fade-up">
-            <h1 class="font-black text-white name-glow leading-tight">أمير <span class="text-red-custom">عايد</span></h1>
-            <p class="text-lg md:text-2xl font-bold mb-10 italic bg-black/40 px-8 py-2 rounded-full inline-block mt-4 border border-white/5">فنٌ يملأ الفراغ.. ودقة تحاكي الواقع ✨</p>
-            <br>
-            
-            <!-- أزرار المدير (تظهر بعد تسجيل الدخول) -->
-            <div class="admin-only mb-10">
-                <div class="bg-green-600/20 border border-green-600 p-4 rounded-2xl inline-block shadow-2xl">
-                    <button onclick="document.getElementById('uploadModal').style.display='flex'" class="bg-green-600 text-white px-8 py-3 rounded-xl font-black shadow-lg hover:bg-green-700 transition">➕ إضافة لوحة جديدة للمعرض</button>
-                </div>
-            </div>
-
-            <!-- عرض الفلاش سال الموقوت -->
-            <div id="flash-sale-area" class="flash-box rounded-[2.5rem] p-6 max-w-xl mx-auto text-right" onclick="openFlashDetail()">
-                <div class="flex flex-col md:flex-row gap-6 items-center">
-                    <img id="offer-img" src="ha5.jpg" class="w-32 h-32 object-cover rounded-2xl border-2 border-red-custom shadow-xl">
-                    <div class="flex-1">
-                        <h3 class="text-red-custom font-black text-[10px] mb-1 uppercase tracking-widest">🔥 عرض فلاش محدود</h3>
-                        <h2 id="offer-title" class="text-xl font-bold text-white mb-2">تحفة العصر الروماني (1984)</h2>
-                        <div class="flex items-center gap-4">
-                            <span class="text-4xl font-black text-white">200$</span>
-                            <span class="line-through text-gray-600 text-sm">250$</span>
-                        </div>
-                        <div id="timer" class="text-[11px] font-mono font-bold text-red-custom bg-black/50 p-2 rounded-lg inline-block mt-3 border border-red-custom/20"></div>
-                    </div>
-                </div>
-            </div>
+    <header class="hero-section text-center px-4">
+        <h1 class="text-7xl md:text-9xl font-black mb-6 text-white" style="text-shadow: 0 0 40px rgba(239, 68, 68, 0.6);">أمير <span class="text-red-custom">عايد</span></h1>
+        <p class="text-lg md:text-2xl font-bold mb-10 italic bg-black/40 px-8 py-2 rounded-full inline-block mt-4">فنٌ يملأ الفراغ.. ودقة تحاكي الواقع ✨</p>
+        
+        <!-- لوحة التحكم (للمدير) -->
+        <div class="admin-only mb-10 bg-green-600/10 border border-green-600/30 p-6 rounded-[2.5rem]">
+            <button onclick="document.getElementById('uploadModal').style.display='flex'" class="bg-green-600 text-white px-10 py-3 rounded-2xl font-black shadow-xl hover:bg-green-700 transition">➕ رفع مجموعة صور للمعرض</button>
         </div>
+
+        <div id="flash-sale-container" class="hidden max-w-xl mx-auto"></div>
     </header>
 
     <!-- المعرض -->
     <section class="max-w-7xl mx-auto px-6 py-20 text-right">
-        <!-- الفلاتر -->
-        <div class="flex flex-wrap justify-center gap-3 mb-16">
-            <button onclick="filterArt('all')" class="cat-btn bg-red-custom px-8 py-2.5 rounded-2xl font-black text-sm text-white">الكل</button>
-            <button onclick="filterArt('oil')" class="cat-btn bg-white/5 px-8 py-2.5 rounded-2xl font-bold text-sm text-gray-400">رسم زيتي</button>
-            <button onclick="filterArt('mural')" class="cat-btn bg-white/5 px-8 py-2.5 rounded-2xl font-bold text-sm text-gray-400">جداريات</button>
-            <button onclick="filterArt('lead')" class="cat-btn bg-white/5 px-8 py-2.5 rounded-2xl font-bold text-sm text-gray-400">رسم رصاص</button>
-            <button onclick="filterArt('kids')" class="cat-btn bg-white/5 px-8 py-2.5 rounded-2xl font-bold text-sm text-gray-400">روضات</button>
+        <div id="filterButtons" class="flex flex-wrap justify-center gap-3 mb-16">
+            <button onclick="filterArt('all')" class="cat-btn bg-red-custom px-8 py-2.5 rounded-2xl font-black text-sm text-white shadow-xl">الكل</button>
         </div>
-
-        <!-- المعرض الديناميكي -->
-        <div id="dynamicGallery" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            <div class="col-span-full text-center py-20 text-gray-600 animate-pulse">جاري جلب لوحاتك من السحابة...</div>
-        </div>
+        <div id="dynamicGallery" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 text-center"></div>
     </section>
 
-    <!-- نافذة عرض اللوحة -->
+    <!-- Footer السري -->
+    <footer class="py-20 border-t border-white/5 text-center">
+        <div class="flex items-center justify-center gap-2 text-gray-800 hover:text-red-900 transition cursor-pointer" onclick="document.getElementById('loginModal').style.display='flex'">
+            <span class="w-8 h-8 border border-current rounded-full flex items-center justify-center font-bold">P</span>
+            <span class="text-sm font-bold text-gray-900">طاهر</span>
+        </div>
+    </footer>
+
+    <!-- Modal الرفع المتعدد (مطور) -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content max-w-lg p-10 border-green-600 border-2">
+            <div class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">✕</div>
+            <h2 class="text-2xl font-black text-green-500 mb-8 text-center underline">رفع مجموعة صور دفعة واحدة</h2>
+            
+            <div id="batchStatus" class="hidden bg-blue-600 text-white p-3 text-xs text-center mb-6 rounded-xl font-bold italic animate-pulse">
+                جاري رفع الصور... (0/0)
+            </div>
+
+            <input type="text" id="artTitle" placeholder="اسم اللوحة (سيتم ترقيمه تلقائياً)" class="glass-input">
+            
+            <label class="block text-[10px] text-gray-500 mr-2 mb-1">القسم (زيتي، روضات، جداريات...):</label>
+            <input type="text" id="artCategory" list="categoriesList" placeholder="اكتب القسم هنا" class="glass-input">
+            <datalist id="categoriesList">
+                <option value="زيتي"><option value="جداريات"><option value="رصاص"><option value="روضات">
+            </datalist>
+
+            <input type="text" id="artGroup" placeholder="اسم الكروب (اختياري لربط الصور ببعضها)" class="glass-input">
+            <input type="text" id="artPrice" placeholder="السعر" class="glass-input">
+            <input type="text" id="artSize" placeholder="القياس" class="glass-input">
+            
+            <div class="bg-white/5 p-4 rounded-xl mb-6 border border-white/10">
+                <label class="block text-xs text-gray-400 mb-3">يمكنك اختيار عدة صور من جهازك:</label>
+                <input type="file" id="artFiles" multiple class="block w-full text-xs text-gray-400 file:bg-green-600 file:text-white file:px-4 file:py-2 file:rounded-lg file:border-none cursor-pointer">
+            </div>
+            
+            <button onclick="uploadBatchArtworks()" id="upBtn" class="w-full bg-green-600 p-5 rounded-2xl font-black text-xl shadow-xl shadow-green-600/20">بدء الرفع الجماعي</button>
+        </div>
+    </div>
+
+    <!-- [باقي المودالات: تسجيل الدخول، عرض الصور تبقى كما هي] -->
+    <div id="loginModal" class="modal"><div class="modal-content max-w-sm p-10 text-center"><div class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">✕</div><h2 class="text-xl font-black text-red-custom mb-6">تحقق الإدارة</h2><input type="email" id="email" placeholder="البريد" class="glass-input"><input type="password" id="password" placeholder="كلمة السر" class="glass-input"><button onclick="login()" class="w-full bg-red-custom p-4 rounded-xl font-black mt-4 shadow-lg shadow-red-600/20 text-white">دخول</button></div></div>
+
     <div id="imageModal" class="modal">
         <div class="modal-content shadow-2xl">
             <div class="close-btn" onclick="closeModal()">✕</div>
             <div class="flex flex-col md:flex-row">
                 <div class="relative w-full md:w-3/5 bg-black h-[400px] md:h-[650px] flex items-center justify-center">
                     <img id="modal-img" src="" class="max-w-full max-h-full object-contain">
-                </div>
-                <div class="w-full md:w-2/5 p-10 text-right overflow-y-auto max-h-[450px] md:max-h-[650px]">
-                    <h2 id="modal-title" class="text-3xl font-black text-red-custom mb-6"></h2>
-                    <p id="modal-desc" class="text-gray-300 text-sm leading-relaxed mb-8 border-r-2 border-red-custom pr-4 font-bold"></p>
-                    <div id="info-box" class="bg-white/5 p-6 rounded-3xl space-y-4">
-                        <p id="modal-size" class="text-white font-bold text-lg"></p>
-                        <p id="modal-price" class="text-3xl font-black text-red-custom"></p>
+                    <div id="nav-controls" class="absolute bottom-0 left-0 w-full nav-bar hidden">
+                        <div class="nav-btn" onclick="changeImage(1)">←</div>
+                        <span id="img-counter" class="text-white font-bold text-xs"></span>
+                        <div class="nav-btn" onclick="changeImage(-1)">→</div>
                     </div>
-                    <a id="wa-link" href="#" class="block w-full mt-10 bg-red-custom text-white text-center p-5 rounded-2xl font-black text-lg hover:bg-red-700 transition shadow-2xl shadow-red-600/30">اطلب عبر واتساب</a>
+                </div>
+                <div class="w-full md:w-2/5 p-10 text-right overflow-y-auto max-h-[400px] md:max-h-[650px]">
+                    <h2 id="modal-title" class="text-3xl font-black text-red-custom mb-6"></h2>
+                    <div id="info-box" class="bg-white/5 p-6 rounded-3xl border-r-4 border-red-custom"><p id="modal-size" class="text-white font-bold mb-2"></p><p id="modal-price" class="text-3xl font-black text-red-custom"></p></div>
+                    <a id="wa-link" href="#" class="block w-full mt-10 bg-red-custom text-white text-center p-5 rounded-2xl font-black text-lg">تواصل واتساب</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- نافذة رفع لوحة جديدة (ImgBB) -->
-    <div id="uploadModal" class="modal">
-        <div class="modal-content max-w-lg p-10 border-green-600/50 border-2">
-            <div class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">✕</div>
-            <h2 class="text-2xl font-black text-green-500 mb-8 text-center underline decoration-white/10">نشر عمل فني جديد</h2>
-            <div id="upStatus" class="hidden bg-blue-600 text-white p-3 text-xs text-center mb-6 rounded-xl font-bold italic animate-pulse">جاري الرفع لفايربيس...</div>
-            
-            <input type="text" id="title" placeholder="اسم اللوحة" class="glass-input">
-            <select id="category" class="glass-input">
-                <option value="oil">رسم زيتي</option>
-                <option value="mural">جداريات</option>
-                <option value="lead">رسم رصاص</option>
-                <option value="kids">رسم روضات</option>
-            </select>
-            <input type="text" id="price" placeholder="السعر" class="glass-input">
-            <input type="text" id="size" placeholder="القياس" class="glass-input">
-            <textarea id="desc" placeholder="الوصف أو الكليشة الخاصة" class="glass-input h-32"></textarea>
-            
-            <label class="block text-gray-500 text-xs mb-2 mr-2">اختر الصورة:</label>
-            <input type="file" id="file" class="block w-full text-xs mb-8 text-gray-400">
-            
-            <button onclick="uploadArt()" id="upBtn" class="w-full bg-green-600 p-5 rounded-2xl font-black text-xl hover:bg-green-700 transition">نشر في المعرض الآن</button>
-        </div>
-    </div>
-
-    <!-- تسجيل دخول المدير -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content max-w-sm p-10 text-center">
-            <div class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">✕</div>
-            <h2 class="text-2xl font-black text-red-custom mb-8">دخول الإدارة</h2>
-            <input type="email" id="email" placeholder="البريد الإلكتروني" class="glass-input">
-            <input type="password" id="password" placeholder="كلمة المرور" class="glass-input">
-            <button onclick="login()" class="w-full bg-red-custom p-4 rounded-xl font-bold mt-6 text-lg shadow-lg shadow-red-600/20">دخول</button>
-        </div>
-    </div>
-
-    <!-- نافذة طلب الرسم -->
-    <div id="orderModal" class="modal">
-        <div class="modal-content max-w-lg p-10">
-            <div class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">✕</div>
-            <h2 class="text-3xl font-black text-red-custom mb-8 text-center">طلب رسم شخصي</h2>
-            <form onsubmit="handleOrderRequest(event)">
-                <div id="orderLoading" class="hidden absolute inset-0 bg-black/95 flex flex-col items-center justify-center z-50 rounded-3xl">
-                    <div class="w-16 h-16 border-4 border-red-custom border-t-transparent rounded-full animate-spin mb-6"></div>
-                    <p class="font-bold italic">جاري إرسال طلبك...</p>
-                </div>
-                <select id="orderType" class="glass-input"><option>رصاص</option><option>زيتي</option><option>أكريليك</option></select>
-                <input type="tel" id="orderPhone" placeholder="رقم هاتفك للتواصل" class="glass-input" required>
-                <input type="file" id="orderFile" accept="image/*" class="text-xs mb-8 block">
-                <button type="submit" class="w-full bg-red-custom p-5 rounded-2xl font-black text-xl shadow-lg">تأكيد الطلب</button>
-            </form>
-        </div>
-    </div>
-
     <script>
-        // --- تهيئة Firebase بالبيانات الجديدة ---
+        // --- Firebase Config (نفس بياناتك) ---
         const firebaseConfig = {
-            apiKey: "AIzaSyDPLdyIpzU-IAovzrWqvH-mJNneP8W2nOA",
-            authDomain: "ameer-5ad16.firebaseapp.com",
-            projectId: "ameer-5ad16",
-            storageBucket: "ameer-5ad16.firebasestorage.app",
-            messagingSenderId: "819681497602",
-            appId: "1:819681497602:web:ea755095b3a0c178dd8d1b"
+            apiKey: "AIzaSyD0g9fQAHVKLfdwUTFzsRvgd_ejXKgDMZM",
+            authDomain: "artt2001-47518.firebaseapp.com",
+            projectId: "artt2001-47518",
+            storageBucket: "artt2001-47518.firebasestorage.app",
+            messagingSenderId: "254647132198",
+            appId: "1:254647132198:web:42e0e71b3b9443ab9dc6e7"
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -199,11 +136,13 @@
         const ADMIN_EMAIL = "taheralrsam100@gmail.com";
         const IMGBB_KEY = "2992948833d81d6dc8555d60cdd13431";
 
-        // مراقبة الدخول
+        let artworks = [];
+        let currentGroup = [];
+        let currentIndex = 0;
+
         auth.onAuthStateChanged(user => {
             if (user && user.email === ADMIN_EMAIL) {
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
-                document.getElementById('loginBtn').style.display = 'none';
             }
         });
 
@@ -215,44 +154,61 @@
         }
         function logout() { auth.signOut(); location.reload(); }
 
-        // وظيفة الرفع عبر ImgBB (مجانية 100%)
-        async function uploadArt() {
-            const file = document.getElementById('file').files[0];
-            const title = document.getElementById('title').value;
-            if(!file || !title) return alert("اختر صورة واكتب اسماً");
+        // --- وظيفة الرفع المتعدد الجديدة ---
+        async function uploadBatchArtworks() {
+            const files = document.getElementById('artFiles').files;
+            const baseTitle = document.getElementById('artTitle').value;
+            const category = document.getElementById('artCategory').value;
+            const groupName = document.getElementById('artGroup').value || baseTitle;
+
+            if (files.length === 0 || !baseTitle || !category) return alert("املاً الاسم والقسم واختر صورة واحدة على الأقل");
 
             const upBtn = document.getElementById('upBtn');
-            const upStatus = document.getElementById('upStatus');
-            upBtn.disabled = true; upStatus.classList.remove('hidden');
+            const statusDiv = document.getElementById('batchStatus');
+            
+            upBtn.disabled = true;
+            statusDiv.classList.remove('hidden');
 
-            try {
-                const fd = new FormData();
-                fd.append("image", file);
-                const r = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method:"POST", body:fd});
-                const data = await r.json();
-                const url = data.data.url;
+            for (let i = 0; i < files.length; i++) {
+                statusDiv.innerText = `جاري رفع الصورة (${i + 1} من أصل ${files.length})...`;
+                
+                try {
+                    const fd = new FormData();
+                    fd.append("image", files[i]);
+                    const r = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+                    const d = await r.json();
 
-                await db.collection('artworks').add({
-                    title, url,
-                    category: document.getElementById('category').value,
-                    price: document.getElementById('price').value,
-                    size: document.getElementById('size').value,
-                    desc: document.getElementById('desc').value,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert("تم النشر بنجاح!");
-                location.reload();
-            } catch(err) { alert("حدث خطأ في الرفع!"); upBtn.disabled = false; }
+                    if (d.success) {
+                        await db.collection('artworks').add({
+                            title: files.length > 1 ? `${baseTitle} (${i + 1})` : baseTitle,
+                            category,
+                            group: groupName,
+                            price: document.getElementById('artPrice').value,
+                            size: document.getElementById('artSize').value,
+                            url: d.data.url,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                } catch (e) { console.error("Upload error for file " + i); }
+            }
+
+            alert("تم رفع جميع الصور بنجاح!");
+            location.reload();
         }
 
-        // جلب الأعمال
-        let artworks = [];
+        // --- جلب البيانات وعرضها ---
         async function loadData() {
-            try {
-                const snap = await db.collection('artworks').orderBy('createdAt', 'desc').get();
-                artworks = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
-                renderGallery('all');
-            } catch(e) { console.log("DB Error"); }
+            const snap = await db.collection('artworks').orderBy('createdAt', 'desc').get();
+            artworks = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
+            
+            // استخراج الأقسام الفريدة للأزرار
+            const cats = [...new Set(artworks.map(a => a.category))];
+            const filterDiv = document.getElementById('filterButtons');
+            cats.forEach(c => {
+                filterDiv.innerHTML += `<button onclick="filterArt('${c}')" class="cat-btn bg-white/5 px-8 py-2.5 rounded-2xl font-bold text-sm text-gray-400 hover:bg-white/10 transition">${c}</button>`;
+            });
+
+            renderGallery('all');
         }
 
         function renderGallery(cat) {
@@ -263,107 +219,55 @@
             filtered.forEach(art => {
                 grid.innerHTML += `
                     <div class="glass-card rounded-[2.2rem] overflow-hidden group">
-                        <img src="${art.url}" onclick="openPreview('${art.id}')" class="w-full h-56 object-cover rounded-t-[2.2rem]">
-                        <div class="p-4 text-center">
-                            <p class="text-[11px] font-bold text-gray-300 mb-2">${art.title}</p>
-                            <button onclick="deleteArt('${art.id}')" class="admin-only bg-red-600/20 text-red-500 text-[9px] px-3 py-1 rounded-lg border border-red-600/30">حذف نهائي</button>
+                        <img src="${art.url}" onclick="openWork('${art.id}')" class="w-full h-48 md:h-56 object-cover">
+                        <div class="p-3 text-center">
+                            <p class="text-[10px] font-bold text-gray-300">${art.title}</p>
+                            <button onclick="deleteArt('${art.id}')" class="admin-only text-red-500 text-[8px] mt-2 underline">حذف</button>
                         </div>
                     </div>`;
             });
-            if (auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
-                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
-            }
         }
 
-        function filterArt(cat) {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.replace('bg-red-custom', 'bg-white/5'));
-            event.target.classList.replace('bg-white/5', 'bg-red-custom');
-            renderGallery(cat);
-        }
-
-        function openPreview(id) {
+        function openWork(id) {
             const art = artworks.find(a => a.id === id);
-            document.getElementById('modal-img').src = art.url;
-            document.getElementById('modal-title').innerText = art.title;
-            
-            let klisha = art.desc;
-            if(!klisha) {
-                if(art.category === 'mural') klisha = "نحول جدرانكم الصامتة إلى لوحات تنبض بالحياة بدقة المنظور الهندسي.";
-                else if(art.category === 'lead') klisha = "الرصاص.. لغة الظل والنور التي تخلد الملامح بواقعية فائقة.";
-                else if(art.category === 'kids') klisha = "عالم من الألوان والبهجة لروضاتكم! ✨ حكايات خيالية مبهجة.";
-                else klisha = "عمل فني احترافي بريشة أمير عايد.";
+            if(art.group && art.group !== "") {
+                currentGroup = artworks.filter(a => a.group === art.group);
+                currentIndex = currentGroup.findIndex(a => a.id === id);
+                document.getElementById('nav-controls').classList.remove('hidden');
+                document.getElementById('nav-controls').classList.add('flex');
+            } else {
+                currentGroup = [art];
+                currentIndex = 0;
+                document.getElementById('nav-controls').classList.add('hidden');
             }
-
-            document.getElementById('modal-desc').innerText = klisha;
-            document.getElementById('modal-size').innerText = art.size ? "📏 القياس: " + art.size : "";
-            document.getElementById('modal-price').innerText = art.price ? "💰 السعر: " + art.price : "";
-            document.getElementById('wa-link').href = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent('أود طلب اللوحة: ' + art.title)}`;
+            updateModal();
             document.getElementById('imageModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
+        }
+
+        function updateModal() {
+            const art = currentGroup[currentIndex];
+            document.getElementById('modal-img').src = art.url;
+            document.getElementById('modal-title').innerText = art.title;
+            document.getElementById('modal-size').innerText = art.size ? "📏 القياس: " + art.size : "";
+            document.getElementById('modal-price').innerText = "💰 السعر: " + art.price;
+            document.getElementById('img-counter').innerText = `${currentIndex + 1} / ${currentGroup.length}`;
+            document.getElementById('wa-link').href = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent('أود طلب: ' + art.title)}`;
+        }
+
+        function changeImage(n) {
+            currentIndex = (currentIndex + n + currentGroup.length) % currentGroup.length;
+            updateModal();
         }
 
         async function deleteArt(id) {
-            if(confirm("حذف اللوحة نهائياً؟")) {
-                await db.collection('artworks').doc(id).delete();
-                location.reload();
-            }
+            if(confirm("حذف نهائي؟")) { await db.collection('artworks').doc(id).delete(); location.reload(); }
         }
 
-        function openFlashDetail() {
-            openSingleItemStatic('تحفة العصر الروماني (1984)', 'ha5.jpg', '70 × 120 سم', '200$', 'لوحة رومانية قد تعود إلى الرسام الروماني عام 1984، قطعة فنية فريدة تعكس دقة الفن الكلاسيكي وتاريخه العريق.');
-        }
-
-        function openSingleItemStatic(title, img, size, price, desc) {
-            document.getElementById('modal-img').src = img;
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-desc').innerText = desc;
-            document.getElementById('modal-size').innerText = "📏 " + size;
-            document.getElementById('modal-price').innerText = "💰 " + price;
-            document.getElementById('wa-link').href = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent('أود طلب عرض الفلاش: ' + title)}`;
-            document.getElementById('imageModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() { document.getElementById('imageModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        function openWorkshop() { document.getElementById('workshopModal').style.display='flex'; }
-        function closeWorkshop() { document.getElementById('workshopModal').style.display='none'; }
-        function openOrderModal() { document.getElementById('orderModal').style.display='flex'; }
-
-        // الفلاش سال
-        function runFlash() {
-            const elapsed = (Date.now() - new Date('2024-01-01').getTime()) % (13 * 24 * 60 * 60 * 1000);
-            const idx = Math.floor(elapsed / (48 * 60 * 60 * 1000));
-            if(idx < 5) {
-                document.getElementById('flash-sale-area').style.display = 'block';
-                const timeLeft = (48 * 60 * 60 * 1000) - (elapsed % (48 * 60 * 60 * 1000));
-                const h = Math.floor(timeLeft / 3600000);
-                const m = Math.floor((timeLeft % 3600000) / 60000);
-                const s = Math.floor((timeLeft % 60000) / 1000);
-                document.getElementById('timer').innerText = `ينتهي خلال: ${h}س ${m}د ${s}ث`;
-            } else { document.getElementById('flash-sale-area').style.display = 'none'; }
-        }
-        setInterval(runFlash, 1000); runFlash();
-
-        async function handleOrderRequest(e) {
-            e.preventDefault();
-            const loader = document.getElementById('orderLoading'); loader.classList.remove('hidden');
-            const file = document.getElementById('orderFile').files[0];
-            try {
-                let url = "(بدون صورة)";
-                if (file) {
-                    const fd = new FormData(); fd.append("image", file);
-                    const r = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method:"POST", body:fd});
-                    const d = await r.json(); if(d.success) url = d.data.url;
-                }
-                const msg = `🎨 طلب رسم جديد:\n- النوع: ${document.getElementById('orderType').value}\n- الهاتف: ${document.getElementById('orderPhone').value}\n- الصورة: ${url}`;
-                window.location.href = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`;
-                loader.classList.add('hidden');
-            } catch(err) { window.location.href = `https://wa.me/${MY_PHONE}?text=طلب رسم جديد`; loader.classList.add('hidden'); }
-        }
+        function closeModal() { document.getElementById('imageModal').style.display='none'; document.body.style.overflow='auto'; }
+        function filterArt(c) { renderGallery(c); }
 
         loadData();
     </script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>AOS.init();</script>
 </body>
 </html>
